@@ -1,3 +1,5 @@
+var config = require('config');
+
 module.exports = function(router){
   router.get('/api/license/:id', function *(){
     console.log('test');

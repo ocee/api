@@ -1,3 +1,5 @@
+var config = require('config');
+var serverConfig = config.get('server');
 var app = require('koa')();
 var router = require('koa-router');
 var api = router();
@@ -8,4 +10,4 @@ require('./handler/main')(api);
 app.use(api.routes())
 app.use(api.allowedMethods());
 
-app.listen(3000);
+app.listen(serverConfig.port);
