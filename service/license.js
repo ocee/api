@@ -23,6 +23,10 @@ function* loadDB() {
 }
 
 function execute(script, params, db) {
+  if(!db || !db.client || !db.done){
+    throw new Error('db connection object is missing objects');
+  }
+
   return function(callback) {
     db.client.query(script, params, function(err, result) {
       db.done();
@@ -37,12 +41,24 @@ function execute(script, params, db) {
 }
 
 function* executeScript(script, params, db) {
+  if(!script){
+    throw new Error('script is null');
+  }
+  if(!db || !db.client || !db.done){
+    throw new Error('db connection object is missing objects');
+  }
+
   var connect = yield execute(script, params, db);
   return connect;
 }
 
 module.exports = {
   getLicenseById: function*(licenseId) {
+    if(!licenseId){
+      console.log('throw license id error');
+        throw new Error('license id is null');
+    }
+
     try {
       var db = yield loadDB(),
       result = null,
