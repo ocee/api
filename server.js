@@ -6,8 +6,10 @@ var api = router();
 
 //initialize handlers
 require('./handler/main')(api);
+//initialize services
+// require('./service/main')(api);
 
-app.use(api.routes())
+app.use(api.routes());
 app.use(api.allowedMethods());
 
 app.listen(serverConfig.port);

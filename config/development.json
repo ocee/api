@@ -2,7 +2,7 @@
   "server":{
     "port": 3000
   },
-  "database": {
-      "pg_connection_string": ""
+  "postgres": {
+      "connection_string": "postgres://tuannguyen@localhost:5432/ocee"
   }
 }
