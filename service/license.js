@@ -23,7 +23,7 @@ function* loadDB() {
 }
 
 function execute(script, params, db) {
-  if(!db || !db.client || !db.done){
+  if (!db || !db.client || !db.done) {
     throw new Error('db connection object is missing objects');
   }
 
@@ -41,10 +41,10 @@ function execute(script, params, db) {
 }
 
 function* executeScript(script, params, db) {
-  if(!script){
+  if (!script) {
     throw new Error('script is null');
   }
-  if(!db || !db.client || !db.done){
+  if (!db || !db.client || !db.done) {
     throw new Error('db connection object is missing objects');
   }
 
@@ -54,16 +54,16 @@ function* executeScript(script, params, db) {
 
 module.exports = {
   getLicenseById: function*(licenseId) {
-    if(!licenseId){
+    if (!licenseId) {
       console.log('throw license id error');
-        throw new Error('license id is null');
+      throw new Error('license id is null');
     }
 
     try {
       var db = yield loadDB(),
-      result = null,
-      sqlStatement =
-      `SELECT
+        result = null,
+        sqlStatement =
+        `SELECT
         license_id,
         license_hash,
         rating
@@ -72,11 +72,36 @@ module.exports = {
       WHERE
         license_id = $1`;
       result = yield executeScript(sqlStatement, [licenseId], db);
-      if(result.length > 0){
+      if (result.length > 0) {
         return result[0];
+      } else {
+        throw new Error('no results found');
       }
-      else {
-          throw new Error('no results found');
+    } catch (error) {
+      throw error;
+    }
+  },
+  updateLicense: function*(licenseHash, licenseId, rating) {
+    if (!licenseId) {
+      console.log('throw license id error');
+      throw new Error('license id is null');
+    }
+
+    try {
+      var db = yield loadDB(),
+        result = null,
+        sqlStatement =
+        `
+        INSERT INTO license
+          (license_hash, license_id, rating) VALUES ($1, $2, $3)
+        ON CONFLICT (license_hash)
+          DO UPDATE license SET rating = rating + $3 WHERE license_hash = $1;
+        `;
+      result = yield executeScript(sqlStatement, [licenseHash, licenseId, rating], db);
+      if (result.length > 0) {
+        return result[0];
+      } else {
+        throw new Error('no results found');
       }
     } catch (error) {
       throw error;
