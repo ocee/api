@@ -1,3 +1,23 @@
+DROP TABLE IF EXISTS ocee_user;
+CREATE TABLE ocee_user
+(
+  ocee_user_id UUID NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password INTEGER NOT NULL DEFAULT 0,
+  profile json NULL,
+
+  CONSTRAINT ocee_user_id PRIMARY KEY (ocee_user_id)
+);
+CREATE INDEX ix_ocee_user_email ON ocee_user (email);
+
+DROP TABLE IF EXISTS device;
+CREATE TABLE device
+(
+  device_id TEXT NOT NULL,
+
+  CONSTRAINT device_id PRIMARY KEY (device_id)
+);
+
 DROP TABLE IF EXISTS license;
 CREATE TABLE license
 (
@@ -7,10 +27,9 @@ CREATE TABLE license
 
   CONSTRAINT license_id PRIMARY KEY (license_id)
 );
+CREATE INDEX ix_license_license_hash ON license (license_hash);
 
-CREATE INDEX ix_license_hash ON license (license_hash);
-
-DROP FUNCTION IF EXISTS upsert;
+DROP FUNCTION IF EXISTS upsert(TEXT,UUID,INTEGER);
 CREATE FUNCTION upsert(hash TEXT, id UUID, delta INTEGER) RETURNS VOID AS
 $$
 BEGIN
