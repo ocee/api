@@ -1,5 +1,6 @@
 var bcrypt = require('bcrypt');
 var uuid = require('uuid');
+var crypto = require('crypto');
 
 function encrypt(key) {
   var keyMod = null;
@@ -31,7 +32,11 @@ function* loadEncrypt(key){
 }
 
 module.exports = {
-  hashKey: function *(license) {
+  hashKey: function (license) {
+    var hash = crypto.createHash('md5').update(license).digest('hex');
+    return hash;
+  },
+  hashPassword: function *(license) {
     var hash = yield loadEncrypt(license);
     return hash;
   },

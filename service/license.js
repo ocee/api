@@ -53,8 +53,8 @@ function* executeScript(script, params, db) {
 }
 
 module.exports = {
-  getLicenseById: function*(licenseId) {
-    if (!licenseId) {
+  getLicenseByHash: function*(licenseHash) {
+    if (!licenseHash) {
       console.log('throw license id error');
       throw new Error('license id is null');
     }
@@ -70,8 +70,8 @@ module.exports = {
       FROM
         license
       WHERE
-        license_id = $1`;
-      result = yield executeScript(sqlStatement, [licenseId], db);
+        license_hash = $1`;
+      result = yield executeScript(sqlStatement, [licenseHash], db);
       if (result.length > 0) {
         return result[0];
       } else {

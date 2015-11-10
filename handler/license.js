@@ -3,9 +3,11 @@ var koaBody = require('koa-body')();
 var util = require('./../common/utils');
 
 module.exports = function(router) {
-  router.get('/api/license/:id', function*(next) {
+  router.get('/api/license/:license', function*(next) {
     try {
-      this.body = yield licenseService.getLicenseById(this.params.id);
+      var key = util.hashKey(this.params.license);
+      console.log(key);
+      this.body = yield licenseService.getLicenseByHash(key);
     } catch (error) {
       throw error;
     }
@@ -13,8 +15,8 @@ module.exports = function(router) {
 
   router.put('/api/license/', koaBody, function*(next) {
     try {
-      console.log(this.request.body);
-      var key = yield util.hashKey(this.request.body.license);
+      var key = util.hashKey(this.request.body.license);
+      console.log(key);
       var uuid = util.getUuid();
       var rating = this.request.body.rating;
       var result = yield licenseService.upsertLicense(key, uuid, rating);
