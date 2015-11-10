@@ -81,7 +81,7 @@ module.exports = {
       throw error;
     }
   },
-  updateLicense: function*(licenseHash, licenseId, rating) {
+  upsertLicense: function*(licenseHash, licenseId, rating) {
     if (!licenseId) {
       console.log('throw license id error');
       throw new Error('license id is null');
@@ -90,13 +90,7 @@ module.exports = {
     try {
       var db = yield loadDB(),
         result = null,
-        sqlStatement =
-        `
-        INSERT INTO license
-          (license_hash, license_id, rating) VALUES ($1, $2, $3)
-        ON CONFLICT (license_hash)
-          DO UPDATE license SET rating = rating + $3 WHERE license_hash = $1;
-        `;
+        sqlStatement = `SELECT upsert($1,$2,$3);`;
       result = yield executeScript(sqlStatement, [licenseHash, licenseId, rating], db);
       if (result.length > 0) {
         return result[0];

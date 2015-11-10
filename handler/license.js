@@ -17,9 +17,9 @@ module.exports = function(router) {
       var key = yield util.hashKey(this.request.body.license);
       var uuid = util.getUuid();
       var rating = this.request.body.rating;
-      var result = yield licenseService.updateLicense(key, uuid, rating);
-      console.log(key);
-      this.body = 'test';
+      var result = yield licenseService.upsertLicense(key, uuid, rating);
+      this.body = result;
+      this.response.status = 204;
     } catch (error) {
       throw error;
     }

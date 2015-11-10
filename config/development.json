@@ -3,6 +3,6 @@
     "port": 3000
   },
   "postgres": {
-      "connection_string": "postgres://tuannguyen@localhost:5432/ocee"
+      "connection_string": "postgres://tuan@localhost:5432/ocee"
   }
 }
