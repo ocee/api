@@ -3,7 +3,7 @@ var koaBody = require('koa-body')();
 var util = require('./../common/utils');
 
 module.exports = function(router) {
-  router.get('/api/license/:license', function*(next) {
+  router.get('/api/license/rate/:license', function*(next) {
     try {
       var key = util.hashKey(this.params.license);
       this.body = yield licenseService.getLicenseByHash(key);
