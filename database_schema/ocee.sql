@@ -3,7 +3,7 @@ CREATE TABLE ocee_user
 (
   ocee_user_id UUID NOT NULL,
   email TEXT UNIQUE NOT NULL,
-  password INTEGER NOT NULL DEFAULT 0,
+  password TEXT NOT NULL DEFAULT 0,
   profile json NULL,
 
   CONSTRAINT ocee_user_id PRIMARY KEY (ocee_user_id)
@@ -56,4 +56,6 @@ LANGUAGE plpgsql;
 
 
 --insert sample data into table
-INSERT INTO license (license_id, license_hash, rating) VALUES ('84e3e8ea-9076-496d-aaed-4d90daa27e42','123',5)
+INSERT INTO license (license_id, license_hash, rating) VALUES ('84e3e8ea-9076-496d-aaed-4d90daa27e42','123',5);
+--password is 123
+INSERT INTO ocee_user (ocee_user_id, email, password, profile) VALUES ('84e3e8ea-9076-496d-aaed-4d90daa27e42','tqn222@yahoo.com','$2a$10$vKzFdD1fhGD/pRvSOyc9JOAlCLXvBgU.K3wBCCv9cqFPAFq9lESh2','{"name": "tuan"}');

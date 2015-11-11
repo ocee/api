@@ -31,14 +31,31 @@ function* loadEncrypt(key){
   return yield encrypt(key);
 }
 
+function validateHash(password, hash){
+  return function(callback){
+    bcrypt.compare(password, hash, function(err, res) {
+      if(err){
+        return callback(err, null);
+      }
+
+      return callback(null, res);
+    });
+  }
+}
+
+function* loadValidateHash(password, hash){
+  return yield validateHash(password, hash);
+}
+
 module.exports = {
-  hashKey: function (license) {
-    var hash = crypto.createHash('md5').update(license).digest('hex');
-    return hash;
+  validatePasswordHash: function *(password, hash){
+    return yield loadValidateHash(password, hash);
   },
-  hashPassword: function *(license) {
-    var hash = yield loadEncrypt(license);
-    return hash;
+  hashKey: function (license) {
+    return crypto.createHash('md5').update(license).digest('hex');
+  },
+  hashPassword: function *(pw) {
+    return yield loadEncrypt(pw);
   },
   getUuid: function(){
     return uuid.v4();
