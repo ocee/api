@@ -6,7 +6,6 @@ module.exports = function(router) {
   router.get('/api/license/:license', function*(next) {
     try {
       var key = util.hashKey(this.params.license);
-      console.log(key);
       this.body = yield licenseService.getLicenseByHash(key);
     } catch (error) {
       throw error;
@@ -16,7 +15,6 @@ module.exports = function(router) {
   router.put('/api/license/', koaBody, function*(next) {
     try {
       var key = util.hashKey(this.request.body.license);
-      console.log(key);
       var uuid = util.getUuid();
       var rating = this.request.body.rating;
       var result = yield licenseService.upsertLicense(key, uuid, rating);
